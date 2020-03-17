@@ -58,9 +58,13 @@ TEST(ClassLoaderTest, basicLoad) {
 }
 
 TEST(ClassLoaderUniquePtrTest, basicLoadFailures) {
-    class_loader::ClassLoader loader1(LIBRARY_1, false);
-    EXPECT_THROW(class_loader::impl::loadLibrary("LIBRARY_1", &loader1), class_loader::LibraryLoadException);
-    EXPECT_THROW(class_loader::impl::unloadLibrary("LIBRARY_1", &loader1), class_loader::LibraryUnloadException);
+  ClassLoader loader1(LIBRARY_1, false);
+  EXPECT_THROW(
+    class_loader::impl::loadLibrary("LIBRARY_1", &loader1),
+    class_loader::LibraryLoadException);
+  EXPECT_THROW(
+    class_loader::impl::unloadLibrary("LIBRARY_1", &loader1),
+    class_loader::LibraryUnloadException);
 }
 
 TEST(ClassLoaderUniquePtrTest, MultiLibraryClassLoaderFailures) {
