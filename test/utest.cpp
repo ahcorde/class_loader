@@ -58,7 +58,7 @@ TEST(ClassLoaderTest, basicLoad) {
 }
 
 TEST(ClassLoaderUniquePtrTest, basicLoadFailures) {
-  ClassLoader loader1(LIBRARY_1, false);
+  class_loader::ClassLoader loader1(LIBRARY_1, false);
   EXPECT_THROW(
     class_loader::impl::loadLibrary("LIBRARY_1", &loader1),
     class_loader::LibraryLoadException);
