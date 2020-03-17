@@ -58,6 +58,21 @@ TEST(ClassLoaderUniquePtrTest, basicLoad) {
   }
 }
 
+TEST(ClassLoaderUniquePtrTest, LibrariesUsedByClassLoader) {
+  try {
+    ClassLoader loader1(LIBRARY_1, false);
+    std::vector<std::string> v = class_loader::impl::getAllLibrariesUsedByClassLoader(&loader1);
+    ASSERT_EQ(v.size(), 1);
+    EXPECT_THROW(class_loader::impl::loadLibrary("LIBRARY_1", &loader1), class_loader::LibraryLoadException);
+
+    ASSERT_NO_THROW(class_loader::impl::printDebugInfoToScreen());
+
+    SUCCEED();
+  } catch (class_loader::ClassLoaderException & e) {
+    FAIL() << "ClassLoaderException: " << e.what() << "\n";
+  }
+}
+
 TEST(ClassLoaderUniquePtrTest, correctLazyLoadUnload) {
   try {
     ASSERT_FALSE(class_loader::impl::isLibraryLoadedByAnybody(LIBRARY_1));
