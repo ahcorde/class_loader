@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - ros2
 
 jobs:
   build_and_test:
@@ -39,7 +39,7 @@ jobs:
           file: ros_ws/lcov/total_coverage.info
           flags: unittests
           name: codecov-umbrella
-          yml: codecov.yml
+          yml: ./codecov.yml
           fail_ci_if_error: false
       - uses: actions/upload-artifact@master
         with:
