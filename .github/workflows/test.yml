@@ -3,16 +3,19 @@ on:
   pull_request:
   push:
     branches:
-      - ros2
+      - master
+
 jobs:
   build_and_test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-          os: [ubuntu-18.04]
+        os: [ubuntu-18.04]
     steps:
-    - uses: ros-tooling/setup-ros@0.0.13
+      - uses: ros-tooling/setup-ros@0.0.13
+        # with:
+        #  required-ros-distributions: eloquent
       - name: generete lcov config file (disable branch, function)
         id: lcovrc_file
         run: |
@@ -27,18 +30,18 @@ jobs:
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
           coverage-ignore-pattern: "*/test/*"
           coverage-config-file: "${{ steps.lcovrc_file.outputs.LCOVRC_FILE }}"
-    - uses: codecov/codecov-action@v1
-      # Prevent being rate limited by only reporting coverage from the Ubuntu
-      # build.
-      if: matrix.os == 'ubuntu-18.04'
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ros_ws/lcov/total_coverage.info
-        flags: unittests
-        name: codecov-umbrella
-        yml: ./codecov.yml
-        fail_ci_if_error: true
-    - uses: actions/upload-artifact@master
-      with:
-        name: colcon-logs-${{ matrix.os }}
-        path: ros_ws/log
+      - uses: codecov/codecov-action@master
+        # Prevent being rate limited by only reporting coverage from the Ubuntu
+        # build.
+        if: matrix.os == 'ubuntu-18.04'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ros_ws/lcov/total_coverage.info
+          flags: unittests
+          name: codecov-umbrella
+          yml: codecov.yml
+          fail_ci_if_error: false
+      - uses: actions/upload-artifact@master
+        with:
+          name: colcon-logs-${{ matrix.os }}
+          path: ros_ws/log
